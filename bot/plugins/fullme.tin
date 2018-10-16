@@ -1,0 +1,45 @@
+/*
+请注意，你的活跃度已经偏低。exp 5M以前，你可以使用fullme每15分钟补满全部状态，double内力。
+5M后长时间不使用fullme，会被系统判定为机器人。
+> fullme
+你刚刚用过这个命令不久，还要7分钟22秒才能再用。
+> fullme
+你现在才来呀，不过总比不来好。
+你的客户端不支持MXP,请直接打开链接查看图片。
+请注意，忽略验证码中的红色文字。
+http://pkuxkx.com/antirobot/robot.php?filename=1539661727234135
+> fullme 错误
+好像什么都没有发生，但是又好像有什么事情做错了。再来一次试试！
+> fullme 正确
+你突然感到精神一振，浑身似乎又充满了力量！
+也许是上天垂青于你的勤奋和努力吧，一个小时之内你不用担心被判为机器人。
+>
+*/
+
+#alias {fullme.get-url} {
+    fullme;
+    #class wait-for-fullme-url open;
+    #action {http://pkuxkx.com/antirobot/robot.php?filename=%*} {
+        about-me fullme URL: %1;
+        #class wait-for-fullme-url kill;
+    };
+    #action {你刚刚用过这个命令不久，还要7分钟22秒才能再用。} {
+        about-me 时间不对，太早了。;
+        #class wait-for-fullme-url kill;
+    };
+    #class wait-for-fullme-url close;
+};
+
+#alias {fullme.send-code} {
+    fullme;
+    #class wait-result open;
+    #action {好像什么都没有发生，但是又好像有什么事情做错了。再来一次试试！} {
+        about-me 需要重新输入;
+        #class wait-result kill;
+    };
+    #action {也许是上天垂青于你的勤奋和努力吧，一个小时之内你不用担心被判为机器人。} {
+        about-me fullme 成功。;
+        #class wait-result kill;
+    };
+    #class wait-result close;
+};

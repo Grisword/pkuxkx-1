@@ -1,0 +1,18 @@
+#alias KSLG {liangong.start};
+#alias {liangong.start} {
+    #class {auto-liangong} open;
+    #action {你吐纳完毕，睁开双眼，站了起来} {hp;dazuo 80};
+    #action {你运功完毕，深深吸了口气，站了起来} {hp;tuna 100};
+    #action {现在的气太少了} {#delay 20 dazuo 80};
+    #action {你现在精不够} {#delay 20 tuna 100};
+    #action {你现在精不足} {#delay 20 tuna 100};
+    #class {auto-liangong} close;
+    dazuo 10;
+    hp;
+};
+
+#alias TZLG {liangong.stop};
+#alias {liangong.stop} {
+    #class {auto-liangong} kill;
+    #showme 好！这次练完就不练了。;
+};

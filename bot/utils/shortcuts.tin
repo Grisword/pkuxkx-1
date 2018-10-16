@@ -1,0 +1,16 @@
+#alias {cls} {clear};
+#alias {clear} {
+    #system {tput clear};
+};
+
+#alias {about-me} {
+    #showme <139>%0;
+    #format {log.now} {%t} {%Y-%m-%d %H:%M:%S};
+    #line log ${debug.logfile} ${log.now} %0;
+};
+
+#function {about-me} {
+    #showme <139>%0;
+    #format {log.now} {%t} {%Y-%m-%d %H:%M:%S};
+    #line log ${debug.logfile} ${log.now} %0;
+};

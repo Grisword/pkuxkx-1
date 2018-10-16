@@ -1,0 +1,27 @@
+#var login.user {}
+#var login.gag-list {}
+#var login.autoexec {}
+
+#alias {login} {
+    #var login.session ${%1};
+    #var login.user ${%2};
+    #var login.gag-list ${%3};
+    #var login.autoexec %4;
+    #session ${login.session.name} ${login.session.url} ${login.session.port};
+};
+
+#action {您的英文名字} {
+    #send ${login.user.id};
+    #send ${login.user.passwd};
+    #unaction {您的英文名字};
+};
+
+#action {{这里明显的出口有|重新连线}} {
+    #showme 登录成功。;
+    #forall {${login.gag-list}[%*]} {
+        #gag &0;
+    };
+    #unvar login.gag-list;
+    ${login.autoexec};
+    #class login kill;
+};

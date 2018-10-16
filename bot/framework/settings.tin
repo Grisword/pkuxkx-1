@@ -1,0 +1,26 @@
+#config {mccp} {on}
+#config {packet patch} {0.8}
+
+#pathdir {n}        {s}     {1}
+#pathdir {e}        {w}     {2}
+#pathdir {s}        {n}     {4}
+#pathdir {w}        {e}     {8}
+#pathdir {u}        {d}     {16}
+#pathdir {d}        {u}     {32}
+#pathdir {ne}       {sw}    {3}
+#pathdir {se}       {nw}    {6}
+#pathdir {nw}       {se}    {9}
+#pathdir {sw}       {ne}    {12}
+#pathdir {nu}       {sd}    {17}
+#pathdir {eu}       {nd}    {18}
+#pathdir {su}       {nd}    {20}
+#pathdir {wu}       {nd}    {24}
+#pathdir {nd}       {su}    {33}
+#pathdir {ed}       {nu}    {34}
+#pathdir {sd}       {nu}    {36}
+#pathdir {wd}       {nu}    {40}
+#pathdir {out}      {enter} {64}
+#pathdir {enter}    {out}   {128}
+
+#ticker {save-data} {save} {600};
+#ticker {backup-data} {backup} {1800};

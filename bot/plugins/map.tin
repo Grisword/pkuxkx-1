@@ -1,0 +1,17 @@
+#config {convert meta} off;
+
+#action {^%* - $} {
+    #map set roomname %1;
+}{10};
+
+#event {MAP ENTER ROOM} {
+    #map map 16x16 map.txt {a};
+};
+
+#action {明显的出口有 %1} {
+    #map set roomdata %1;
+};
+
+#action {这里唯一的出口有 %1} {
+    #map set roomdata %1;
+};

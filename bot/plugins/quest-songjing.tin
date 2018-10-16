@@ -1,0 +1,19 @@
+#var {songjing.after-handler} {ask-quest}
+
+#var {songjing.done} {false}
+
+#alias {songjing.start} {
+    #if {"%4" != ""} {
+        #var {songjing.after-handler} %1;
+    };
+
+    path-cx-fzg;
+    jie %2;
+    about-me 主人，快带我去「%1」诵经！;
+    about-me 经书 %2;
+    about-me 篇章 %3;
+};
+
+#alias {songjing.cont} {
+    #nop 诵经
+};

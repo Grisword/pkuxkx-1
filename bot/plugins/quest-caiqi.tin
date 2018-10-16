@@ -1,0 +1,33 @@
+#var {caiqi.after-handler} {ask-quest}
+
+#var {caiqi.done} {false}
+
+#alias {caiqi.start} {
+    #if {"%1" != ""} {
+        #var {songjing.after-handler} %1;
+    };
+
+    n;n;n;n;n;nu;u;wu;su;eu;nu;nu;
+    about-me 啊！前面是迷宫！我到不了天柱峰了，主人快来救救我！;
+
+    #delay 115 cancel-quest;
+    #delay 116 ask-quest;
+};
+
+#alias {caiqi.cont1} {
+    nu;u;wu;su;eu;nu;nu;nu;nu;nu;nu;nu;nu;nu;nu;
+    #delay 1 {
+        about-me 好嘞！现在开始采气！;
+        caiqi;
+    };
+    #delay 100 {
+        sd;sd;sd;sd;sd;sd;sd;sd;sd;sd;wd;nd;ed;d;sd;
+        #delay 1 {about-me 啊！前面是迷宫！我回不去了，主人快来救救我！};
+    };
+};
+
+#alias {caiqi.cont2} {
+    sd;sd;wd;nd;ed;d;sd;s;s;s;s;s;
+    success-quest;
+    ask-quest;
+};

@@ -1,0 +1,49 @@
+#!/usr/bin/env tt++
+#class main open;
+
+#nop 加载程序主框架
+#read framework/module-loader.tin;
+
+#nop 加载 MUD 设置
+#read framework/settings.tin;
+
+#nop 默认的 MUD 连接参数
+#read framework/env-default.tin;
+
+#nop 工具代码
+#read utils/shortcuts.tin;
+#read utils/path.tin;
+
+#nop 用户自定义的参数，主要是账号和密码
+#read etc/env-user.tin;
+
+#event {PROGRAM START} {
+    auto-login;
+};
+
+#alias {auto-login} {
+    load-module login;
+    login {session} {user} {gag-list} {xkx-online};
+};
+
+#alias {xkx-online} {
+    xkx-settings;
+    load-module quest;
+    ask-quest;
+};
+
+#alias {exit} {#end};
+#alias {quit} {#end};
+
+#event {SESSION DISCONNECTED} {
+    auto-login;
+};
+
+#alias {LDS} {reload-scripts};
+#alias {reload-scripts} {
+    #kill {all};
+    #showme 重新加载配置文件。;
+    #read xkx.tin;
+};
+
+#class main close;

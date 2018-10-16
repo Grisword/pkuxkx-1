@@ -1,0 +1,32 @@
+#var {liandan.after-handler} {ask-quest}
+
+#alias {liandan-start} {
+    #if {"%1" != ""} {
+        #var {liandan.after-handler} %1;
+    };
+    n;n;n;n;e;e;
+    ask yu about 炼丹;
+    s;l lu;zuo;kan;zuo;
+};
+
+#action {~*********\e[1;31m^\e[2;37;0m********} {
+    change L;
+};
+
+#action {~*********\e[1;35m^\e[2;37;0m********} {
+    change M;
+};
+
+#action {~*********\e[1;33m^\e[2;37;0m********} {
+    change H;
+};
+
+#action {已经成丹了} {
+    zhan;
+    n;ask yu about 炼丹;
+    w;w;s;s;s;s;
+    ask chongxu about success;
+    ${liandan.after-handler};
+    about-me 炼丹任务完成。;
+    #delay 4 {#class {quest-liandan} kill};
+};

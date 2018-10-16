@@ -1,0 +1,72 @@
+#var {zhenfa.after-handler} {ask-quest};
+
+#alias {zhenfa-start} {
+    #if {"%1" != ""} {
+        #var {zhenfa.after-handler} %1;
+    };
+    east;
+};
+
+#action {房间中已经有人在演习阵法，请等对方演习结束再进去吧} {
+    #delay 1 east;
+};
+
+#var {zhenfa.type} {};
+#var {zhenfa.zouwei} {};
+
+#action {^小校场 - $} {
+    zhenfa;
+};
+
+#action {放驴娃一会儿站在%1位} {
+    #var {zhenfa.zouwei} %1;
+    about-me 我知道了，我一会儿需要站在「${zhenfa.zouwei}」位。;
+    zouwei ${zhenfa.zouwei};
+};
+
+#action {按照『%1』的要求往下走一步} {
+    #var {zhenfa.type} %1;
+    about-me 我知道了，这次练习的是「${zhenfa.type}」，目前我的站位是「${zhenfa.zouwei}」。;
+    #if { "${zhenfa.type}" == "正五行阵" } {
+        #if { "${zhenfa.zouwei}" == "金" } {
+            #var {zhenfa.zouwei} 水; zouwei 水;
+        };
+        #elseif { "${zhenfa.zouwei}" == "水" } {
+            #var {zhenfa.zouwei} 木; zouwei 木;
+        };
+        #elseif { "${zhenfa.zouwei}" == "木" } {
+            #var {zhenfa.zouwei} 火; zouwei 火;
+        };
+        #elseif { "${zhenfa.zouwei}" == "火" } {
+            #var {zhenfa.zouwei} 土; zouwei 土;
+        };
+        #elseif { "${zhenfa.zouwei}" == "土" } {
+            #var {zhenfa.zouwei} 金; zouwei 金;
+        };
+    };
+    #elseif { "${zhenfa.type}" == "反五行阵" } {
+        #if { "${zhenfa.zouwei}" == "金" } {
+            #var {zhenfa.zouwei} 木; zouwei 木;
+        };
+        #elseif { "${zhenfa.zouwei}" == "木" } {
+            #var {zhenfa.zouwei} 土; zouwei 土;
+        };
+        #elseif { "${zhenfa.zouwei}" == "土" } {
+            #var {zhenfa.zouwei} 水; zouwei 水;
+        };
+        #elseif { "${zhenfa.zouwei}" == "水" } {
+            #var {zhenfa.zouwei} 火; zouwei 火;
+        };
+        #elseif { "${zhenfa.zouwei}" == "火" } {
+            #var {zhenfa.zouwei} 金; zouwei 金;
+        };
+    };
+};
+
+#action {五行阵演练到此结束} {
+    about-me 练阵任务完成。;
+    west;
+    success-quest;
+    ${zhenfa.after-handler};
+    #delay 4 {#class {quest-zhenfa} kill};
+};

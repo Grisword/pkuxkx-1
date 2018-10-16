@@ -1,0 +1,79 @@
+#class {ask-quest-from-chongxu} open;
+
+#alias {AQ} {ask-quest};
+#alias {ask-quest} {
+    ask chongxu about quest;
+};
+
+#alias {CQ} {cancel-quest};
+#alias {cancel-quest} {
+    ask chongxu about cancel;
+};
+
+#alias {SQ} {success-quest};
+#alias {success-quest} {
+    ask chongxu about success;
+};
+
+#action {你向冲虚道长打听有关『quest』的消息。$} {
+    #class waitfor-chongxu-answer open;
+    #action {冲虚道长说道：「武当三侠最近迷上了炼丹} {
+        about-me 太好了，又要炼丹了吗？;
+        #class waitfor-chongxu-answer kill;
+        goto-liandan;
+    };
+    #action {冲虚道长说道：「武当派以真武七截阵闻名天下} {
+        about-me 练阵也不错哦。;
+        #class waitfor-chongxu-answer kill;
+        goto-zhenfa;
+    };
+    #action {冲虚道长说道：「%*要在%%1熟读典籍，据说要诵唱%%2的%%3$} {
+        about-me 诵经，又是诵经，烦死了，取消算了。 ;
+        about-me 「%%1」 「%%2」 「%%3」;
+        #class waitfor-chongxu-answer kill;
+        #nop goto-songjing {%%1} {%%2} {%%3};
+        cancel-quest;
+        ask-quest;
+    };
+    #action {冲虚道长说道：「道家炼气最讲究时辰和地点} {
+        about-me 采气好啊，采气可以涨太极神功！;
+        #class waitfor-chongxu-answer kill;
+        goto-caiqi;
+    };
+    #action {冲虚道长说道：「现在还没有新的工作可以分配给你} {
+        #showme 好的，那我待会儿再来看看。;
+        #class waitfor-chongxu-answer kill;
+        #delay 3 ask-quest;
+    };
+    #action {冲虚道长说道：「道兄还有任务在身} {
+        about-me 是嘛？我怎么不记得了？;
+        #class waitfor-chongxu-answer kill;
+    };
+    #action {冲虚道长说道：「} {
+        #showme 这什么工作？听都没听过不如取消算了。;
+        #class waitfor-chongxu-answer kill;
+        cancel-quest;
+        ask-quest;
+    }{10};
+    #class waitfor-chongxu-answer close;
+};
+
+#alias {goto-liandan} {
+    load-module quest-liandan;
+    liandan-start;
+};
+
+#alias {goto-zhenfa} {
+    load-module quest-zhenfa;
+    zhenfa-start;
+};
+
+#alias {goto-caiqi} {
+    load-module quest-caiqi;
+    caiqi.start;
+};
+
+#alias {goto-songjing} {
+    load-module quest-songjing;
+    songjing.start {%1} {%2} {%3};
+}

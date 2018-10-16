@@ -1,0 +1,29 @@
+#class module-loader open;
+
+#nop Load the external file into the specified class.;
+#alias {LM} {load-module};
+#alias {load-module} {
+    #var {MOD-NAME} {%1};
+    #var {MOD-PATH} {plugins/%1.tin};
+
+    #if {"${MOD-NAME}" == ""} {
+        #showme <139>Usage: load-module <module-name><079>;
+        #return;
+    };
+
+    #showme {Loading ${MOD-PATH} into ${MOD-NAME}\.};
+    #class {${MOD-NAME}} {kill};
+    #class {${MOD-NAME}} {read} {${MOD-PATH}};
+
+    #unvar {MOD-NAME}
+    #unvar {MOD-PATH}
+}
+
+#nop Drop specified class.;
+#alias {KM} {kill-module};
+#alias {kill-module} {
+    #showme {Killing %1};
+    #class {%1} {kill};
+};
+
+#class module-loader close;

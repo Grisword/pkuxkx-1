@@ -1,0 +1,46 @@
+#class path-china open;
+
+#alias {wudang-to-luoyang} {
+    '先下山;
+    sd;wd;wd;sd;sd;e;sd;sd;sd;ed;
+    '再去襄阳;
+    e;e;e;se;e;e;ne;n;e;e;e;e;e;e;e;e;e;e;e;e;e;
+    '再去洛阳;
+    n;n;n;n;n;n;ne;n;n;n;n;n;n;n;
+};
+
+#alias {luoyang-to-wudang} {
+    '先去襄阳再说;
+    s;s;s;s;s;s;s;sw;s;s;s;s;s;s
+    '现在再去武当吧;
+    w;w;w;w;w;w;w;w;w;w;w;w;w;s;sw;w;w;nw;w;w;w;
+    '终于到武当山门口了;
+    wu;nu;nu;nu;w;nu;nu;eu;eu;nu;
+    '这里就是紫霄宫了;
+};
+
+#class path-china close;
+
+#class path-wudang open;
+
+#alias {path-cx-fzg} {
+    n;n;n;w;w;u;
+};
+
+#alias {path-fzg-cx} {
+    d;e;e;s;s;s;
+};
+
+#alias {path-cx-tzf} {
+    n;n;n;n;n;nu;u;wu;su;eu;nu;nu;
+    w;w;n;
+    nu;u;wu;su;eu;nu;nu;nu;nu;nu;nu;nu;nu;nu;nu;
+};
+
+#alias {path-tzf-cx} {
+    sd;sd;sd;sd;sd;sd;sd;sd;sd;sd;wd;nd;ed;d;sd;
+    s;e;e;
+    sd;sd;wd;nd;ed;d;sd;s;s;s;s;s;
+}
+
+#class path-wudang close;

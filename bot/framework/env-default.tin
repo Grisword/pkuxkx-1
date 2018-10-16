@@ -1,0 +1,26 @@
+#nop session 的名字，没特殊需求不建议修改
+#var session.name   xkx;
+
+#nop session 的 URL，有些人可能需要用 pkuxkx.net
+#var session.url    pkuxkx.com;
+
+#nop session 的端口，按照论坛上面的地址修改
+#var session.port   8080;
+
+#nop 你的账号英文 ID
+#var user.id        bot;
+
+#nop 你的账号密码
+#var user.passwd    123456;
+
+#nop 挂机日志
+#var debug.logfile  {log/quest.log};
+
+#nop 你想 gag 的列表
+#list gag-list add 小米一号
+#list gag-list add 小翠
+
+#alias {xkx-settings} {
+    #nop 想要自动执行的代码写这里;
+    #showme hello mud;
+};
