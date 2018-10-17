@@ -1,0 +1,453 @@
+#class shaolin open;
+
+#alias {enterdoor} {knock gate;n};
+#alias {outdoor} {open gate;s};
+#pathdir {enterdoor} {outdoor} {128};
+#var chufang_to_jin {e;s;s;e;s;s;sd;s;outdoor;s;sd;sd;sd;wd;w;sd;sd;eu};
+#var jin_to_chufang {wd;nu;nu;e;eu;nu;nu;nu;n;enterdoor;n;nu;n;n;w;n;n;w};
+#var dao_to_chufang {n;n;w;n;n;open door;w};
+#var chufang_to_dao {open door;e;s;s;e;s;s};
+#var dao_to_gulou {n;w;enter;#6 u};
+#var gulou_to_dao {#6 d;out;e;s};
+#var dao_to_zhonglou {n;e;enter;#6 u};
+#var zhonglou_to_dao {#6 d;out;w;s};
+#var dao_to_sleep {n;n;n;nu;n;n;n;e;n};
+#var sleep_to_dao {s;w;s;s;s;sd;s;s;s};
+#var dao_to_fzl {#3 n;nu;n;n};
+#var fzl_to_dao {s;s;sd;s;s;s};
+#alias {show_to_do} {#var onjob 1;#echo {{%1} {-1}}; };
+#var jinglist {im_110;im_734;im_178;im_322;im_730;im_320;im_164;im_58};
+
+
+#alias {askquest} {ask daoguo about quest;};
+#alias {cancelquest} {ask daoguo about cancel;};
+#var onjob 0;
+#map read shaolin.map;
+
+#alias {gochant} {
+	#nop 阿含经;	
+	chanting 6 是时修高相是时修舍相如是比丘为不知时若有比丘善知时者谓知是时修下相是时修高相是时修舍相是谓比丘善知时也;
+	#class gochant open;
+
+	#action {你诵唱完了整段经书，对禅宗心法的理解又进了一步。} {
+		#delay {2} {
+			eat liang;drink jiudai;
+			chanting 6 是时修高相是时修舍相如是比丘为不知时若有比丘善知时者谓知是时修下相是时修高相是时修舍相是谓比丘善知时也;
+		};
+	};
+	#class gochant close;
+};
+
+
+#alias {newbie.dz} {
+        #var nbdz {dazuo %1};
+        $nbdz;
+
+        #class newbie.dz open;
+
+        #act {你将内息走了个小周天，流回丹田，收功站了起来。} {
+                #delay {1} { $nbdz };
+        };
+
+        #act {你现在内力接近圆满状态。} {
+                #delay {1} {dazuo 10;};
+        };
+
+        #action {你现在的气太少了，无法产生内息运行全身经脉}  {
+                say sleep ba....;
+                #delay {1} {drink jiudai;eat liang;du book for 50;sleep};
+        };
+
+        #action {你现在气血严重不足，无法满足打坐最小要求。} {
+                say sleep ba....;
+                #delay {1} {drink jiudai;eat liang;du book for 50;sleep};
+        };
+
+        #action {你一觉醒来，精神抖擞地活动了几下手脚。} {
+                #delay {1} {$nbdz};
+        };
+
+        #action {你刚在三分钟内睡过一觉, 多睡对身体有害无益!} {
+                #delay {6} {drink jiudai;eat liang;du book for 50;sleep;};
+        };
+
+       #class newbie.dz close;
+
+};
+
+#action {你的内力增加了} {
+	dzoff;
+	#delay {4} {halt;$sleep_to_dao;askquest;};
+};
+
+#action {道果禅师说道：「厨房里现在缺水，请慧大拿着木桶从山下挑点水上来吧！}    {
+	#var doquest {挑水去~~~};
+        #delay {2} {$dao_to_chufang;tiaoshui};
+        show_to_do {挑水去~~~};
+};
+
+#action {道果禅师说道：「劈柴任务需要慧大给厨房劈些木柴。」} {
+	#var doquest {劈柴去~~~~~};
+	#delay {2} {$dao_to_chufang;pichai};
+        show_to_do {劈柴去~~~~~};
+};
+
+#action {道果禅师说道：「洛阳万安寺最近人手有点紧张，请我寺僧人帮忙一起给%1举办一场法事，万安寺的高僧已经过去了，请慧大拿着这封信去见高僧。} {
+	#var doquest 超度;
+	show_to_do {超度：%1};
+	#line log shaolin_quest.log  {超度：%1};
+	cancelquest;
+	#var onjob 0;
+	#delay {5} {askquest};
+};
+
+
+#action {道果禅师说道：「今天的早课安排在%1，请慧大诵唱%2的%3} {
+	#var doquest {念经： %1 %2 %3};
+	show_to_do {念经： %1 %2 %3};
+	#var location %1;
+	#var query {%2 %3};
+	#var shu %2;
+	#script {rr} {php ./get_jing.php "$query"}; 
+	#var jingshu {chanting $rr[1]};
+	#if { "$location" == "达摩洞" } {
+		cancelquest;
+        	#var onjob 0;
+        	#delay {5} {askquest};
+	} {nianjing $location;};
+};
+
+#action {道果禅师说道：「又到练武的时候了，请慧大到鼓楼七层击鼓提醒大家一下。」}
+{
+	#var doquest {鼓楼七层击鼓};
+	#delay {2} {
+		$dao_to_gulou;
+		xuqi start;
+		#var actions {hit drum};
+	};
+	show_to_do {鼓楼七层击鼓};
+};
+
+#action {道果禅师说道：「又到练武的时候了，请慧大到钟楼七层敲钟提醒大家一下。」} {
+	#var doquest {钟楼七层敲钟}; 
+	#delay {2} {
+                $dao_to_zhonglou;
+                xuqi start;
+                #var actions {knock bell};
+        };
+        show_to_do {钟楼七层敲钟};
+};
+
+#action {你已经完成道果禅师交待的任务了，可以回去领赏了。} {
+	#delay {2} {xuqi end;};
+	#var onjob 0;
+};
+
+#action {你向道果禅师打听有关『quest』的消息。} {
+	#var doquest 1;
+};
+
+#action {道果禅师说道：「大师还有任务在身，请完成以后再领新任务。」}
+{
+	#var doquest 0;
+	say 被搞飞了;
+};
+
+#action {道果禅师说道：「现在还没有新的工作可以分配给你，请稍等。」} {
+	#if { "$doquest" == "1" } { 
+		#var doquest 0;
+		#delay {2} {
+			$dao_to_sleep;dzon;}; 
+		};
+};
+
+#action {道果禅师对大师拱了拱手，由于} {
+	#delay {3} {askquest};
+};
+
+#action {你现在没有处于蓄气状态，蓄气结束了！} {
+	#if { "$actions" == "hit drum" } {
+		#delay {5} {$gulou_to_dao;ask daoguo about success;};	
+	}; 
+
+	#if { "$actions" == "knock bell" } {
+                #delay {5} {$zhonglou_to_dao;ask daoguo about success;};
+        };
+};
+
+#action {~^\e[5m\e[47;1m\e[1;31m%1} {
+	$actions;
+};
+
+
+#alias {nianjing} {
+	#map goto 61;
+	#map run %1;
+	#delay {4} {getshu;};
+};
+
+#alias {putshu} {put shu in bao fu};
+#alias {getshu} {get shu from bao fu};
+
+#var chaodu 0;
+#var chaoduend 0;
+
+#action {高僧说道：「就等你了，带上佛经一起进去吧。} {
+	#delay {2} {release start;};
+};
+
+#action {请来的高僧开始拿着手里的%1诵起经文来} {
+	#var shu %1;
+	#delay {2} {getshu;};
+};
+
+#action {你观察了一下其他人的诵经进度，发现大家可能在诵唱%1} {
+	#var pageinfo %1;
+	#var query {$shu $pageinfo};
+        #script {rr} {php ./get_jing_page.php "$query"};
+	#math {pagenum} {$rr[1]+1};
+	#var {chaodu} {release chanting $pagenum};
+	show_to_do {超度: $chaodu};
+};
+
+#action {又翻了一页。} {
+	#if { "$chaoduend" == "1" } { release end;#var chaoduend 0;putshu;};
+	#if { "$chaodu" != "0" } { $chaodu;#var chaoduend 1;#var chaodu 0; };
+};
+
+#action {你跟着高僧们念完了一整段经书，完成了道果禅师交代的任务。} {
+	ask seng about 离开;
+};
+
+#action {你做完了道果禅师布置的功课，可以回去向他要奖赏了。} {
+	#delay {3} {
+		#map run 天王殿;
+		#map leave;
+		ask daoguo about success;
+	};
+};
+
+#action {你将一本%1放进包袱。} {
+	#delay {1} {put shu in bao fu};
+};
+
+#action {你从包袱中拿出一本%1。} {
+	#if { "$shu" == "%1" } {
+		say 找到书了,yeah!!;
+		#if { "$doquest" != "超度" } {$jingshu;#delay {3} {putshu;}}; 
+	} { #delay {1} {getshu;}; };
+};
+
+#alias {tiaoshui} {
+	carry tong;
+
+	#class tiaoshui open;
+	#action {{大师从地上拎起一对木桶。|你已经拎着木桶了！|手里拎着两个空木桶，快点去山下装水上山！}} {
+		#delay {2} {
+                        #path load {$chufang_to_jin};
+			#tick {gotojin} {#path walk f} {0.5};
+			#event {END OF PATH} {
+				#untick gotojin;
+				#delay {2} {fill tong;};
+			};		
+		};
+	};
+
+	#action {你将水桶里的水倒进了水缸，然后把木桶放回了原处，看了看水缸似乎再挑} {
+		#delay {2} {carry tong;};
+	};
+
+	#action {打上井水装满了自己手里的两个木桶。} {
+		#delay {4} {
+			#path load {$jin_to_chufang};
+			#tick {gotochufang} {#path walk f} {3};
+			#event {END OF PATH} {#untick gotochufang;fill gang};
+		};
+	};
+
+	#action {你已经把整个水缸都装满了，然后把木桶放回了原处，可以向道果禅师汇报结果了！} {
+		#delay {2} {
+			$chufang_to_dao;
+			ask daoguo about success;
+		};
+		#var onjob 0;
+	};
+
+	#class tiaoshui close;
+};
+
+#var {map_pi[一]} {1};
+#var {map_pi[二]} {2};
+#var {map_pi[三]} {3};
+#var {map_num[一]} {yi};
+#var {map_num[二]} {liang};
+#var {map_num[三]} {san};
+#var {map_chai[松]} {song};
+#var {map_chai[柏]} {bo};
+#var {map_chai[杨]} {yang};
+
+#var {map_wood[小段]} {small};
+#var {map_wood[弯曲]} {bending};
+#var {map_wood[直]} {straight};
+#var {map_wood[大段]} {large};
+#var {map_wood[光滑]} {smooth};
+#var {map_wood[粗糙]} {rough};
+#var {map_wood[树枝]} {branch};
+#var {map_wood[树杈]} {crotch};
+#var {map_wood[树干]} {trunk};
+#var {map_wood[树根]} {root};
+
+#action {紧急需要%1寸宽的%2柴%3根} {
+	#var pinum {$map_pi[%1]};
+	#var chai {$map_num[%1]cun $map_chai[%2]chai};
+	say chai: $chai ... $pinum ... %3;
+	show_to_do {劈柴：$chai %3};	
+	take chai;
+};	
+
+#action {你从柴堆上拿走了一根%1的%2。} {
+	#var wood $map_wood[%1] $map_wood[%2];
+	#delay {2} {put $wood;};
+};
+
+#action {你往%S刀，劈%S寸宽的%S柴。} {
+	#delay {2} {pi $pinum;};
+};
+
+#action {你将一根%S放置在木墩上。} {
+	#delay {2} {pi $pinum;};
+};
+
+#action {你已经非常疲劳了，休息休息再劈柴吧。} {
+	yun recover;
+	#delay {2} {pi $pinum;};
+};
+
+#action {你用力过大，一不小心把整根木柴都劈碎了} {
+	#delay {2} {pi $pinum;};
+};
+	
+#action {实在太小了，你一不小心就把木柴整个劈碎} {
+	#delay {2} {pi $pinum;};
+};
+
+#action {你要上缴什么东西？} {take chai;};
+
+#action {{你上缴了一根|木墩上什么东西都没有，你怎么劈柴？}} {
+	#delay {1} {jiao $chai};
+};
+
+#action {{把柴刀还给我再回去向道果禅师领赏|你劈的木柴够多了！剩下的}} {
+	#delay {2} {
+		jiao dao;
+		$chufang_to_dao;
+		ask daoguo about success;
+	};
+	#var onjob 0;
+};
+
+
+
+#alias {pichai} {
+        ask seng about 劈柴;
+        ask seng about 柴刀;
+        unwield all;wield dao;
+};
+
+
+#alias {gmxue.stop} {#class gmxue kill;};
+
+#alias {gmxue} {
+        #var skill %1;
+        #var gosleep {e;e;n;n;e;n;};
+        #var gomaster {s;w;s;s;w;w;};
+        #var master xuannan;
+
+        xue $master for $skill 50;
+
+        #class gmxue open;
+
+        #act {你共请教了五十次} {
+                #delay {1}  {xue $master for $skill 50;};
+        };
+
+        #act {你今天太累了，结果什么也没有学到。} {
+                yun regenerate;
+        };
+
+        #act {你略一凝神，精神看起来好多了。} {
+                #delay {1} {xue $master for $skill 50;};
+        };
+
+        #act {你的内力不够。} {
+                $gosleep;
+                #delay {1} {drink jiudai;eat liang;sleep;};
+        };
+
+        #act {你一觉醒来，精神抖擞地活动了几下手脚。} {
+                dazuo max;
+        };
+
+        #action {{你将内息走了个小周天，流回丹田，收功站了起来。|你运功完毕，深深吸了口气，站了起来。}} {
+                $gomaster;
+                #delay {1} {xue $master for $skill 50};
+		#nop {#var onjob 0;
+		s;askquest;};
+        };
+
+        #act {你刚在三分钟内睡过一觉, 多睡对身体有害无益!} {
+                #delay {6} {drink jiudai;eat liang;sleep;};
+        };
+        #class gmxue close;
+};
+
+
+#alias {lianx}  {
+   	#var lxskill {lian %1 20};
+   	$lxskill;
+
+   	#class lianx open;
+  	#action {你反复练习} {
+        	#delay {2} {${lxskill};};
+   	};
+
+   	#action {你试着练习} {
+        	#delay {2} {${lxskill};};
+   	};
+
+   	#action {^{你现在气血虚浮|你太累了|你的体力不够|你的体力太低}} {
+        	#delay {2} {yun recover;};
+  	};
+
+   	#action {你深深吸了几口气，脸色看起来好多了。} {
+        	#delay {2}  {drink jiudai;eat ganliang;${lxskill};};
+   	};
+
+   	#act {{你的内力不够|你现在内力不足}} {
+        	#delay {1} {drink jiudai;eat liang;sleep;};
+   	};
+
+   	#act {你一觉醒来，精神抖擞地活动了几下手脚。} {
+        	#nop {#delay {1} {dazuo max;};};
+		$sleep_to_dao;
+		#class lianx kill;
+		#delay {3} {askquest};
+   	};
+
+   	#action {你运功完毕，深深吸了口气，站了起来。} {
+        	#delay {1} {${lxskill};};
+   	};
+
+   	#action {你只觉神元归一，全身精力弥漫，无以复加，忍不住长啸一声，徐徐站了起来。} {
+        	#delay {1} {${lxskill};};
+   	};
+
+   	#act {你刚在三分钟内睡过一觉, 多睡对身体有害无益!} {
+        	#delay {6} {drink jiudai;eat liang;sleep;};
+   	};
+
+   	#class lianx close;
+
+};
+
+#class shaolin stop;
